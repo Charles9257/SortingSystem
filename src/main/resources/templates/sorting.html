@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sorting System App">
+    <meta name="keywords" content="sorting, system, app">
+    <meta name="author" content="Charles Ugwute">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+  <title>Sorting System App</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .flex-item {
+      flex: 1 1 45%;
+    }
+    #result {
+      min-height: 100px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    /* Light Mode */
+    body.light-mode {
+      background-color: #f0f2f5;
+      color: #000;
+    }
+    body.light-mode #result {
+      background-color: #fff;
+      color: #000;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+    body.dark-mode #result {
+      background-color: #444;
+      color: #fff;
+    }
+   
+    .dark-mode .section.flex-container {
+        background-color: #2c2f3a;
+    }
+
+    nav {
+      margin-bottom: 30px;
+    }
+    .mode-toggle {
+      cursor: pointer;
+    }
+    .navbar-light .navbar-nav .nav-link {
+      color: #000;
+    }
+    body.dark-mode .navbar-light .navbar-nav .nav-link {
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="light-mode">
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">🔢 Sorting System</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+             
+           <!-- <a class="btn btn-outline-dark" th:href="@{/logout}">Logout</a>-->
+            <div th:if="${param.logout}">
+                <p>You have been logged out successfully.</p>
+            </div>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link mode-toggle" onclick="toggleMode()">🌓 Change Mode</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    <!-- Main Content -->
+  <div class="container py-5 mt-5">
+    <h1 class="mb-4 text-center"> Sorting | System</h1>
+
+    <!-- Explanation Section -->
+    <div class=" section bg-light p-4 mb-4 rounded shadow-sm">
+      <h3>How It Works</h3>
+      <p>This system allows you to input a list of comma-separated numbers, choose a sorting algorithm, and see the sorted result. The system supports various algorithms such as QuickSort, BubbleSort, MergeSort, HeapSort, SelectionSort, and InsertionSort. The time taken to perform the sorting operation will also be displayed.</p>
+    </div>
+
+    <div class="alert alert-info" role="alert" th:if="${message}" th:text="${message}"></div>
+
+    <form th:action="@{/sort}" method="post" class="flex-container">
+      <div class="flex-item bg-light p-4 rounded shadow">
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+        </div>
+
+        <h3>Input Data</h3>
+        <label for="numberList" class="form-label">Comma-separated numbers:</label>
+        <input type="text" id="numberList" name="numberList" class="form-control mb-3" 
+               placeholder="e.g., 12,5,7,3,8" required th:value="${numberList}" pattern="^[-\d, ]+$" />
+
+        <label for="algorithm" class="form-label">Select sorting algorithm:</label>
+        <select id="algorithm" name="algorithm" class="form-select mb-3" required>
+          <option value="quick" th:selected="${algorithm == 'quick'}">QuickSort</option>
+          <option value="bubble" th:selected="${algorithm == 'bubble'}">BubbleSort</option>
+          <option value="merge" th:selected="${algorithm == 'merge'}">MergeSort</option>
+          <option value="heap" th:selected="${algorithm == 'heap'}">HeapSort</option>
+          <option value="bubble" th:selected="${algorithm == 'bubble'}">BucketSort</option>
+          <option value="selection" th:selected="${algorithm == 'selection'}">SelectionSort</option>
+          <option value="insertion" th:selected="${algorithm == 'insertion'}">InsertionSort</option>
+        </select>
+
+        <button type="submit" class="btn btn-success">🔃 Sort</button>
+        <a href="/" class="btn btn-secondary ms-2">Reset</a>
+      </div>
+
+      <div class="flex-item bg-light p-4 rounded shadow">
+        <h3>Sorted Result</h3>
+        <div id="result" class="mt-3 fade-in">
+          <p th:if="${sortedNumbers != null}">
+            <strong>Sorted Output:</strong> <span th:text="${sortedNumbers}"></span><br>
+            <strong>Time Taken:</strong> <span th:text="${duration} + ' ms'"></span>
+          </p>
+          <p th:if="${sortedNumbers == null}">Sorted numbers will appear here.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>&copy; 2025 Sorting System App || Charles Standard || All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+      document.body.classList.toggle("light-mode");
+    }
+  </script>
+</body>
+</html>

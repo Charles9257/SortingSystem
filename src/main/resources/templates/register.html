@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sorting System Login Page">
+    <meta name="keywords" content="sorting, Login, System">
+    <meta name="author" content="Charles Ugwute">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Register | Sorting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        
+         body {
+            background: url('/images/registe2.jpeg') no-repeat center center / cover;
+            height: 100vh;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            overflow: hidden;
+            shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+            
+        }
+
+        .card {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1); /* semi-transparent */
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px); /* adds blur effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* subtle border for glass look */
+            animation: fadeSlideIn 1s ease-in-out;
+        }
+
+
+        @keyframes fadeSlideIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .form-control:focus {
+            border-color: #38f9d7;
+            box-shadow: 0 0 0 0.2rem rgba(151, 224, 211, 0.25);
+        }
+
+        .text-center a {
+            color: #ffffff;
+            font-size: 0.9rem;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+      
+    <div class="card bg-white text-dark shadow-sm">
+
+        <h4 class="text-center mb-4"> Registration</h4>
+        <form th:action="@{/register}" method="post">
+        <!-- Success message -->
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+            <!-- Error message -->
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="fullName" class="form-control" required placeholder="Your full name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required placeholder="Choose a username">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required placeholder="Your email">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required placeholder="Create a password">
+            </div>
+             
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">SignUp</button>
+                <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+            </div>       
+
+        </form>
+         
+    </div>
+
+</body>
+</html>
